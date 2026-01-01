@@ -1,0 +1,4 @@
+name: JSRunner
+version: '1.0-SNAPSHOT'
+main: me.bunnyking.jSRunner.JSRunner
+api-version: '1.21'

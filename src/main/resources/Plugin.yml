@@ -1,0 +1,14 @@
+name: JSRunner
+version: 1.2
+main: me.bunnyking.jSRunner.JSRunner
+api-version: "1.21"
+
+commands:
+  js:
+    description: Run JS scripts
+    usage: /js
+    permission: jsrunner.admin
+
+permissions:
+  jsrunner.admin:
+    default: op
