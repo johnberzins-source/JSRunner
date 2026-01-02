@@ -1,5 +1,7 @@
 package me.bunnyking.jSRunner;
 
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -100,10 +102,27 @@ public class BukkitListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onPortalEnter(PlayerPortalEvent e) {
-        manager.fireEvent("playerEnterPortal", new PortalWrapper(e.getPlayer()));
 
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        TeleportCause cause = event.getCause();
+
+        if (cause == TeleportCause.NETHER_PORTAL || cause == TeleportCause.END_PORTAL) {
+            PortalWrapper wrapper = new PortalWrapper(
+                    event.getPlayer(),
+                    cause.name(),
+                    event.getFrom(),
+                    event.getTo()
+            );
+
+            manager.fireEvent("playerEnterPortal", wrapper);
+
+            if (wrapper.isCancelled()) {
+                event.setCancelled(true);
+            } else if (wrapper.getTo() != null) {
+                event.setTo(wrapper.getTo());
+            }
+        }
     }
 
 

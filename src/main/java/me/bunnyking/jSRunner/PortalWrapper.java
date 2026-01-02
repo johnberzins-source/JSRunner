@@ -1,15 +1,21 @@
 package me.bunnyking.jSRunner;
 
-import org.bukkit.event.EventHandler;
-import org.graalvm.polyglot.HostAccess;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
-
-import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
+import org.graalvm.polyglot.HostAccess;
 
 public class PortalWrapper {
 
     private final Player player;
-    public PortalWrapper(Player player) {this.player = player;}
+    private final String portalType;
+    private Location to;
+    private boolean cancelled = false;
+
+    public PortalWrapper(Player player, String portalType, Location from, Location to) {
+        this.player = player;
+        this.portalType = portalType;
+        this.to = to;
+    }
 
     @HostAccess.Export
     public String getName() {
@@ -19,6 +25,11 @@ public class PortalWrapper {
     @HostAccess.Export
     public String getUUID() {
         return player.getUniqueId().toString();
+    }
+
+    @HostAccess.Export
+    public String getPortalType() {
+        return portalType; // "NETHER_PORTAL" or "END_PORTAL"
     }
 
     @HostAccess.Export
@@ -36,4 +47,16 @@ public class PortalWrapper {
         return player.getLocation().getBlockZ();
     }
 
+    @HostAccess.Export
+    public void cancel() {
+        this.cancelled = true;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public Location getTo() {
+        return to;
+    }
 }
