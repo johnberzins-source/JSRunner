@@ -10,6 +10,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 
 public class BukkitListener implements Listener {
 
@@ -98,6 +99,13 @@ public class BukkitListener implements Listener {
             event.setDamage(wrapper.getDamage());
         }
     }
+
+    @EventHandler
+    public void onPortalEnter(PlayerPortalEvent e) {
+        manager.fireEvent("playerEnterPortal", new PortalWrapper(e.getPlayer()));
+
+    }
+
 
 
 
