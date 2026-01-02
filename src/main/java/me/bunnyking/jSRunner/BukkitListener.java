@@ -12,7 +12,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class BukkitListener implements Listener {
 
@@ -124,6 +124,24 @@ public class BukkitListener implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onPlayerChat(AsyncPlayerChatEvent event) {
+        ChatWrapper wrapper = new ChatWrapper(
+                event.getPlayer(),
+                event.getMessage()
+        );
+
+        manager.fireEvent("playerChat", wrapper);
+
+        if (wrapper.isCancelled()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        event.setMessage(wrapper.getMessage());
+    }
+
 
 
 
